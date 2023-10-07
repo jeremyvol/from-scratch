@@ -6,7 +6,10 @@ export class PhoneNumberDirective {
     willHaveSpaces = true;
     borderColor = 'red';
 
-    constructor(public element: HTMLElement, private formatter: Formatter) { }
+    constructor(
+        public element: HTMLElement,
+        private formatter: Formatter
+    ) { }
 
     formatPhoneNumber(element: HTMLInputElement) {
         element.value = this.formatter.formatNumber(element.value, 10, 2, this.willHaveSpaces);
