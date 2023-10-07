@@ -1,15 +1,15 @@
+import { Formatter } from "../services/formatter";
+
 export class CreditCardDirective {
     static selector = '[credit-card]';
+    formatter: Formatter;
 
-    constructor(public element: HTMLElement) { }
+    constructor(public element: HTMLElement) {
+        this.formatter = new Formatter;
+    }
 
     formatCreditCardNumber(element: HTMLInputElement) {
-        const value = element.value.replace(/[^\d]/g, '').substring(0, 16);
-        const groups: string[] = [];
-        for (let i = 0; i < value.length; i += 4) {
-            groups.push(value.substring(i, i + 4));
-        }
-        element.value = groups.join(' ');
+        element.value = this.formatter.formatNumber(element.value, 16, 4);
     }
 
     init() {
