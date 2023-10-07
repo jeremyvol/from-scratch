@@ -13,6 +13,7 @@ export class CreditCardDirective {
     }
 
     init() {
+        this.element.style.borderColor = "blue";
         this.element.addEventListener('input', event => {
             this.formatCreditCardNumber(event.target as HTMLInputElement);
         });
