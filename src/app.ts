@@ -1,4 +1,6 @@
 class CreditCardDirective {
+    static selector = '[credit-card]';
+
     constructor(public element: HTMLElement) { }
 
     formatCreditCardNumber(element: HTMLInputElement) {
@@ -21,16 +23,16 @@ class CreditCardDirective {
 
 
 class PhoneNumberDirective {
+    static selector = '[phone-number]';
+
     constructor(public element: HTMLElement) { }
 
     formatPhoneNumber(element: HTMLInputElement) {
         const value = element.value.replace(/[^\d]/g, '').substring(0, 10);
-
         const groups: string[] = [];
         for (let i = 0; i < value.length; i += 2) {
             groups.push(value.substring(i, i + 2));
         }
-
         element.value = groups.join(' ');
     }
 
@@ -42,18 +44,12 @@ class PhoneNumberDirective {
     }
 }
 
-const phoneElements = document.querySelectorAll<HTMLElement>('[phone-number]');
-
-phoneElements.forEach(element => {
-    const directive = new PhoneNumberDirective(element);
-    directive.init();
+// Framework
+const directives = [PhoneNumberDirective, CreditCardDirective];
+directives.forEach(directive => {
+    const elements = document.querySelectorAll<HTMLElement>(directive.selector);
+    elements.forEach(element => {
+        const directiveInstance = new directive(element);
+        directiveInstance.init();
+    });
 });
-
-const creditCardElements = document.querySelectorAll<HTMLElement>('[credit-card]');
-
-creditCardElements.forEach(element => {
-    const directive = new CreditCardDirective(element);
-    directive.init();
-});
-
-
