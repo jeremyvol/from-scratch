@@ -39,6 +39,13 @@ function analyseDirectiveConstructor(directive, element: HTMLElement) {
             return element;
         }
 
+        const directiveProviders = directive.providers || [];
+        const directiveProvider = directiveProviders.find(p => p.provide === name);
+        if (directiveProvider) {
+            const instance = directiveProvider.construct();
+            return instance;
+        }
+
         const service = services.find(s => s.name === name);
 
         if (service) {
