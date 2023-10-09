@@ -22,16 +22,13 @@ export class PhoneNumberDirective {
 
 
     init() {
-
         if (this.element.hasAttribute('with-spaces')) {
             this.willHaveSpaces = this.element.getAttribute('with-spaces') === "true";
         }
-
         if (this.element.hasAttribute('border-color')) {
             this.borderColor = this.element.getAttribute('border-color')!;
         }
         this.element.style.borderColor = this.borderColor;
-
         this.element.addEventListener('input', event => {
             this.formatPhoneNumber(event.target as HTMLInputElement);
         });
