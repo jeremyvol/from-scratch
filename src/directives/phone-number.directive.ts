@@ -10,6 +10,7 @@ import { Formatter } from "../services/formatter";
     }]
 })
 export class PhoneNumberDirective {
+    @Input('with-spaces')
     willHaveSpaces = true;
 
     @Input('border-color')
