@@ -6,8 +6,15 @@ import { Formatter } from "./services/formatter";
 // Framework
 const directives = [PhoneNumberDirective, CreditCardDirective];
 
-const formatter = new Formatter;
-const verifier = new CreditCardVerifier;
+const services: { name: string; instance: any; }[] = [];
+
+const providers = [{
+    provide: "formatter",
+    construct: () => new Formatter("global")
+}, {
+    provide: "verifier",
+    construct: () => new CreditCardVerifier()
+}];
 
 directives.forEach(directive => {
     const elements = document.querySelectorAll<HTMLElement>(directive.selector);
@@ -15,14 +22,12 @@ directives.forEach(directive => {
     elements.forEach(element => {
         const params = analyseDirectiveConstructor(directive, element);
         const directiveInstance = Reflect.construct(directive, params);
-
         // const directiveInstance = new directive(element, formatter, verifier);
         directiveInstance.init();
     });
 });
 
 function analyseDirectiveConstructor(directive, element: HTMLElement) {
-    // console.log(directive.toString());
     const hasConstructor = /constructor\(.*\)/g.test(directive.toString());
 
     if (!hasConstructor) { return []; }
@@ -33,12 +38,24 @@ function analyseDirectiveConstructor(directive, element: HTMLElement) {
         if (name === "element") {
             return element;
         }
-        if (name === "formatter") {
-            return formatter;
+
+        const service = services.find(s => s.name === name);
+
+        if (service) {
+            return service.instance;
         }
-        if (name === "verifier") {
-            return verifier;
+
+        const provider = providers.find(p => p.provide === name);
+
+        if (!provider) {
+            throw new Error("Aucun fournisseur néxiste pour le service " + name);
         }
+        const instance = provider.construct();
+
+        services.push({ name, instance });
+
+        return instance;
+
     });
 
     return params;
