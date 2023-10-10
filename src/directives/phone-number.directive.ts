@@ -1,4 +1,5 @@
 import { Directive } from "../decorators/directive";
+import { HostBinding } from '../decorators/host-binding';
 import { HostListener } from '../decorators/host-listener';
 import { Input } from '../decorators/input';
 import { Formatter } from "../services/formatter";
@@ -15,7 +16,11 @@ export class PhoneNumberDirective {
     willHaveSpaces = true;
 
     @Input('border-color')
+    @HostBinding('style.borderColor')
     borderColor = 'red';
+
+    @HostBinding('placeholder')
+    placeholderText = "Hello world";
 
     constructor(
         public element: HTMLElement,
@@ -30,9 +35,5 @@ export class PhoneNumberDirective {
             2,
             this.willHaveSpaces
         );
-    }
-
-    init() {
-        this.element.style.borderColor = this.borderColor;
     }
 }
