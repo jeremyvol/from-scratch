@@ -1,6 +1,6 @@
 import { Detector } from './change-detector';
-import { Module, ProvidersMetadata, ServiceInstances } from "./types";
-import set from "lodash/set";
+import { Module, ProvidersMetadata, ServiceInstances } from './types';
+import { NgZone } from './zone';
 
 export class Framework {
     /** 
@@ -30,38 +30,40 @@ export class Framework {
         this.providers = metadata.providers || [];
         this.directives = metadata.declarations;
 
-        this.directives.forEach(directive => {
-            const elements = document.querySelectorAll<HTMLElement>(directive.selector);
-            elements.forEach(element => {
-                const params = this.analyseDirectiveConstructor(directive, element);
-                const directiveInstance: any = Reflect.construct(directive, params);
-                const proxy = new Proxy(directiveInstance, {
-                    set(
-                        target, // instance de la directive
-                        propName: string, // propriete que l'on est en train d'essayer de modifier
-                        value, // valeur qu'on est enm train d'essayer de lui donner
-                        proxy) {
-                        target[propName] = value;
+        NgZone.run(() => {
+            this.directives.forEach(directive => {
+                const elements = document.querySelectorAll<HTMLElement>(directive.selector);
+                elements.forEach(element => {
+                    const params = this.analyseDirectiveConstructor(directive, element);
+                    const directiveInstance: any = Reflect.construct(directive, params);
+                    const proxy = new Proxy(directiveInstance, {
+                        set(
+                            target, // instance de la directive
+                            propName: string, // propriete que l'on est en train d'essayer de modifier
+                            value, // valeur qu'on est enm train d'essayer de lui donner
+                            proxy) {
+                            target[propName] = value;
 
-                        if (!target.bindings) {
+                            if (!target.bindings) {
+                                return true;
+                            }
+                            const binding = target.bindings.find(b => b.propName === propName);
+
+                            if (!binding) {
+                                return true;
+                            }
+
+                            Detector.addBinding(
+                                element,
+                                binding.attrName,
+                                value
+                            );
+
                             return true;
                         }
-                        const binding = target.bindings.find(b => b.propName === propName);
-
-                        if (!binding) {
-                            return true;
-                        }
-
-                        Detector.addBinding(
-                            element,
-                            binding.attrName,
-                            value
-                        );
-
-                        return true;
-                    }
+                    });
+                    proxy.init();
                 });
-                proxy.init();
             });
         });
     }
