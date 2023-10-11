@@ -12,6 +12,14 @@ import { Formatter } from "../services/formatter";
     }]
 })
 export class PhoneNumberDirective {
+    static bindings = [{
+        propName: 'borderColor',
+        attrName: 'style.borderColor'
+    }, {
+        propName: 'placeholderText',
+        attrName: 'placeholder'
+    }];
+
     @Input('with-spaces')
     willHaveSpaces = true;
 
@@ -21,6 +29,11 @@ export class PhoneNumberDirective {
 
     @HostBinding('placeholder')
     placeholderText = "Hello world";
+
+    @HostListener('click')
+    onClick() {
+        this.placeholderText = 'Hello Jerem !';
+    }
 
     constructor(
         public element: HTMLElement,

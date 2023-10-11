@@ -1,4 +1,5 @@
 import { Module, ProvidersMetadata, ServiceInstances } from "./types";
+import set from "lodash/set";
 
 export class Framework {
     /** 
@@ -32,8 +33,32 @@ export class Framework {
             const elements = document.querySelectorAll<HTMLElement>(directive.selector);
             elements.forEach(element => {
                 const params = this.analyseDirectiveConstructor(directive, element);
-                const directiveInstance = Reflect.construct(directive, params);
-                directiveInstance.init();
+                const directiveInstance: any = Reflect.construct(directive, params);
+                const proxy = new Proxy(directiveInstance, {
+                    set(
+                        target, // instance de la directive
+                        propName: string, // propriete que l'on est en train d'essayer de modifier
+                        value, // valeur qu'on est enm train d'essayer de lui donner
+                        proxy) {
+                        target[propName] = value;
+
+                        if (!directive.bindings) {
+                            return true;
+                        }
+                        const binding = directive.bindings.find(b => b.propName === propName);
+
+                        if (!binding) {
+                            return true;
+                        }
+
+                        console.log('On met a jour ' + propName.toString + ' avec la valeur ' + value);
+
+                        set(target.element, binding.attrName, value);
+
+                        return true;
+                    }
+                });
+                proxy.init();
             });
         });
     }
