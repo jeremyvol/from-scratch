@@ -19,10 +19,16 @@ export class PhoneNumberDirective {
     }, {
         propName: 'placeholderText',
         attrName: 'placeholder'
+    }, {
+        propName: 'value',
+        attrName: 'value'
     }];
 
     @Input('with-spaces')
     willHaveSpaces = true;
+
+    @HostBinding("value")
+    value = "";
 
     @Input('border-color')
     @HostBinding('style.borderColor')
@@ -42,13 +48,15 @@ export class PhoneNumberDirective {
         private formatter: Formatter
     ) {}
 
-    @HostListener("input", ['event.target'])
-    formatPhoneNumber(element: HTMLInputElement) {
-        element.value = this.formatter.formatNumber(
-            element.value,
+    @HostListener("input", ['event.target.value'])
+    formatPhoneNumber(value: string) {
+        this.value = this.formatter.formatNumber(
+            value,
             10,
             2,
             this.willHaveSpaces
         );
+
+        Detector.digest();
     }
 }

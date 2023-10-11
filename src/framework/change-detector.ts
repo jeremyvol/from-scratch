@@ -1,4 +1,5 @@
 import set from "lodash/set";
+import get from "lodash/get";
 
 export class ChangeDetector {
     bindings: {
@@ -26,6 +27,13 @@ export class ChangeDetector {
         console.group("Digest !");
         while (this.bindings.length > 0) {
             const binding = this.bindings.pop();
+
+            const actualValue = get(binding.element, binding.attrName);
+
+            if (actualValue === binding.value) {
+                continue;
+            }
+
             console.log("Mise en place de " + binding.value + " dans l'attribut", binding.attrName, "de l'element", binding.element);
             set(binding.element, binding.attrName, binding.value);
         }
