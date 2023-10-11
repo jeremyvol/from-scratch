@@ -30,7 +30,6 @@ export class PhoneNumberDirective {
     @HostListener('click')
     onClick() {
         this.placeholderText = 'Hello Jerem !';
-        Detector.digest();
     }
 
     constructor(
@@ -46,7 +45,5 @@ export class PhoneNumberDirective {
             2,
             this.willHaveSpaces
         );
-
-        Detector.digest();
     }
 }
