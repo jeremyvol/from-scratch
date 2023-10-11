@@ -2,6 +2,7 @@ import { Directive } from "../decorators/directive";
 import { HostBinding } from '../decorators/host-binding';
 import { HostListener } from '../decorators/host-listener';
 import { Input } from '../decorators/input';
+import { Detector } from '../framework/change-detector';
 import { Formatter } from "../services/formatter";
 
 @Directive({
@@ -33,6 +34,7 @@ export class PhoneNumberDirective {
     @HostListener('click')
     onClick() {
         this.placeholderText = 'Hello Jerem !';
+        Detector.digest();
     }
 
     constructor(

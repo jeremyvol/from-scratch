@@ -1,3 +1,4 @@
+import { Detector } from './change-detector';
 import { Module, ProvidersMetadata, ServiceInstances } from "./types";
 import set from "lodash/set";
 
@@ -51,9 +52,11 @@ export class Framework {
                             return true;
                         }
 
-                        console.log('On met a jour ' + propName.toString + ' avec la valeur ' + value);
-
-                        set(target.element, binding.attrName, value);
+                        Detector.addBinding(
+                            element,
+                            binding.attrName,
+                            value
+                        );
 
                         return true;
                     }
@@ -106,7 +109,6 @@ export class Framework {
             this.services.push({ name, instance });
 
             return instance;
-
         });
 
         return params;
