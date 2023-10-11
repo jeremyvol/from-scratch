@@ -20,7 +20,6 @@ export class ChangeDetector {
             attrName,
             value,
         });
-        // console.table(this.bindings);
     };
 
     digest() {

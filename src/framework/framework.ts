@@ -43,10 +43,10 @@ export class Framework {
                         proxy) {
                         target[propName] = value;
 
-                        if (!directive.bindings) {
+                        if (!target.bindings) {
                             return true;
                         }
-                        const binding = directive.bindings.find(b => b.propName === propName);
+                        const binding = target.bindings.find(b => b.propName === propName);
 
                         if (!binding) {
                             return true;

@@ -13,16 +13,16 @@ import { Formatter } from "../services/formatter";
     }]
 })
 export class PhoneNumberDirective {
-    static bindings = [{
-        propName: 'borderColor',
-        attrName: 'style.borderColor'
-    }, {
-        propName: 'placeholderText',
-        attrName: 'placeholder'
-    }, {
-        propName: 'value',
-        attrName: 'value'
-    }];
+    // static bindings = [{
+    //     propName: 'borderColor',
+    //     attrName: 'style.borderColor'
+    // }, {
+    //     propName: 'placeholderText',
+    //     attrName: 'placeholder'
+    // }, {
+    //     propName: 'value',
+    //     attrName: 'value'
+    // }];
 
     @Input('with-spaces')
     willHaveSpaces = true;
