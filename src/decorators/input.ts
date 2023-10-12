@@ -13,7 +13,7 @@ export function Input(attrName: string) {
                 this[propName] = this.element.getAttribute(`[${attrName}]`) === "true";
             }
             if (this.element.hasAttribute(attrName)) {
-                this[propName] = this.element.getAttribute('border-color')!;
+                this[propName] = this.element.getAttribute(attrName)!;
             }
 
             originalInitFunction.call(this);
