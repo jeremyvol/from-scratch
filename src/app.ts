@@ -1,4 +1,5 @@
 import { ChronoDirective } from './directives/chrono.directive';
+import { CounterComponent } from './directives/counter.component';
 import { CreditCardDirective } from './directives/credit-card.directive';
 import { PhoneNumberDirective } from './directives/phone-number.directive';
 import { UserProfileComponent } from './directives/user-profile.component';
@@ -11,7 +12,8 @@ Angular.bootstrapApplication({
         CreditCardDirective,
         ChronoDirective,
         PhoneNumberDirective,
-        UserProfileComponent
+        UserProfileComponent,
+        CounterComponent
     ],
     providers: [{
         provide: "formatter",
